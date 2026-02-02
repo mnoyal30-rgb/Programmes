@@ -1,0 +1,90 @@
+# Library Management System
+
+# Data structure: list of dictionaries, each representing a book
+# Book attributes: title, author, isbn, available (bool), issued_to (user_id or None)
+
+def add_book(library, title, author, isbn):
+    """
+    Adds a new book to the library.
+    """
+    book = {
+        'title': title,
+        'author': author,
+        'isbn': isbn,
+        'available': True,
+        'issued_to': None
+    }
+    library.append(book)
+    print(f"Book '{title}' by {author} added to the library.")
+
+def issue_book(library, isbn, user_id):
+    """
+    Issues a book to a user if available.
+    """
+    for book in library:
+        if book['isbn'] == isbn:
+            if book['available']:
+                book['available'] = False
+                book['issued_to'] = user_id
+                print(f"Book '{book['title']}' issued to user {user_id}.")
+                return True
+            else:
+                print(f"Book '{book['title']}' is already issued to user {book['issued_to']}.")
+                return False
+    print(f"Book with ISBN {isbn} not found in the library.")
+    return False
+
+def return_book(library, isbn, user_id):
+    """
+    Returns a book from a user if issued to them.
+    """
+    for book in library:
+        if book['isbn'] == isbn:
+            if not book['available'] and book['issued_to'] == user_id:
+                book['available'] = True
+                book['issued_to'] = None
+                print(f"Book '{book['title']}' returned by user {user_id}.")
+                return True
+            elif book['available']:
+                print(f"Book '{book['title']}' is not issued.")
+                return False
+            else:
+                print(f"Book '{book['title']}' is issued to a different user.")
+                return False
+    print(f"Book with ISBN {isbn} not found in the library.")
+    return False
+
+def search_books(library, query):
+    """
+    Searches for books by title or author (case-insensitive).
+    """
+    results = []
+    query_lower = query.lower()
+    for book in library:
+        if query_lower in book['title'].lower() or query_lower in book['author'].lower():
+            results.append(book)
+    if results:
+        print("Search results:")
+        for book in results:
+            status = "Available" if book['available'] else f"Issued to {book['issued_to']}"
+            print(f"- '{book['title']}' by {book['author']} (ISBN: {book['isbn']}) - {status}")
+    else:
+        print("No books found matching the query.")
+    return results
+
+# Example usage
+if __name__ == "__main__":
+    library = []
+
+    # Add some books
+    add_book(library, "1984", "George Orwell", "1234567890")
+    add_book(library, "To Kill a Mockingbird", "Harper Lee", "0987654321")
+
+    # Issue a book
+    issue_book(library, "1234567890", "user1")
+
+    # Search for books
+    search_books(library, "1984")
+
+    # Return the book
+    return_book(library, "1234567890", "user1")

@@ -1,0 +1,29 @@
+class ModularReportingSystem:
+    def __init__(self):
+        self.reports = {}
+
+    def add_report(self, name, report_func):
+        self.reports[name] = report_func
+
+    def generate_report(self, name, *args, **kwargs):
+        return self.reports.get(name, lambda *a, **k: f"Report '{name}' not found.")(*args, **kwargs)
+
+    def generate_all_reports(self, *args, **kwargs):
+        return {name: func(*args, **kwargs) for name, func in self.reports.items()}
+
+# Report functions
+sales_report = lambda data: f"Total Sales: ${sum(item['sales'] for item in data)}"
+inventory_report = lambda data: f"Total Inventory: {sum(item['quantity'] for item in data)} items"
+user_report = lambda data: f"Total Users: {len(data)}"
+
+if __name__ == "__main__":
+    system = ModularReportingSystem()
+    system.add_report("sales", sales_report)
+    system.add_report("inventory", inventory_report)
+    system.add_report("users", user_report)
+
+    data = [{'sales': 100, 'quantity': 10}, {'sales': 200, 'quantity': 20}, {'sales': 150, 'quantity': 15}]
+
+    print(system.generate_report("sales", data))
+    for name, result in system.generate_all_reports(data).items():
+        print(f"{name.capitalize()} Report: {result}")

@@ -1,0 +1,57 @@
+# Online Exam Evaluation System
+
+def validate_answers(correct_answers, student_answers):
+    """
+    Validates student answers against correct answers.
+    Returns a list of booleans indicating correctness for each question.
+    """
+    if len(correct_answers) != len(student_answers):
+        raise ValueError("Number of answers does not match number of questions.")
+    validation_results = []
+    for i in range(len(correct_answers)):
+        is_correct = correct_answers[i].lower() == student_answers[i].lower()
+        validation_results.append(is_correct)
+    return validation_results
+
+def calculate_score(validation_results, total_questions):
+    """
+    Calculates the score based on validation results.
+    Returns the score as a percentage.
+    """
+    correct_count = sum(validation_results)
+    score = (correct_count / total_questions) * 100
+    return score
+
+def generate_grade(score):
+    """
+    Generates a grade based on the score.
+    """
+    if score >= 90:
+        grade = 'A'
+    elif score >= 80:
+        grade = 'B'
+    elif score >= 70:
+        grade = 'C'
+    elif score >= 60:
+        grade = 'D'
+    else:
+        grade = 'F'
+    return grade
+
+# Example usage
+if "_main_":
+    # Sample correct answers
+    correct_answers = ['a', 'b', 'c', 'd', 'a']
+    # Sample student answers
+    student_answers = ['a', 'b', 'c', 'b', 'a']
+
+    try:
+        validation_results = validate_answers(correct_answers, student_answers)
+        score = calculate_score(validation_results, len(correct_answers))
+        grade = generate_grade(score)
+
+        print(f"Validation Results: {validation_results}")
+        print(f"Score: {score:.2f}%")
+        print(f"Grade: {grade}")
+    except ValueError as e:
+        print(f"Error: {e}")

@@ -1,0 +1,34 @@
+from datetime import date
+
+class EmployeeAttendanceSystem:
+    def __init__(self):
+        self.attendance = {}  # employee_id: set of dates
+
+    def mark_attendance(self, employee_id, attendance_date):
+        if employee_id not in self.attendance:
+            self.attendance[employee_id] = set()
+        self.attendance[employee_id].add(attendance_date)
+
+    def calculate_working_days(self, employee_id, start_date, end_date):
+        if employee_id not in self.attendance:
+            return 0
+        return sum(1 for d in self.attendance[employee_id] if start_date <= d <= end_date)
+
+    def generate_report(self, employee_id):
+        if employee_id not in self.attendance:
+            return f"No attendance records for employee {employee_id}."
+        dates = sorted(self.attendance[employee_id])
+        report = f"Attendance report for employee {employee_id}:\n"
+        for d in dates:
+            report += f"- {d}\n"
+        return report
+
+# Example usage
+if __name__ == "__main__":
+    system = EmployeeAttendanceSystem()
+    system.mark_attendance(1, date(2023, 10, 1))
+    system.mark_attendance(1, date(2023, 10, 2))
+    system.mark_attendance(2, date(2023, 10, 1))
+
+    print(system.calculate_working_days(1, date(2023, 10, 1), date(2023, 10, 31)))  # Output: 2
+    print(system.generate_report(1))

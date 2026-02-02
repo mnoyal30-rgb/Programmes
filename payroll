@@ -1,0 +1,84 @@
+class PayrollSystem:
+    def __init__(self):
+        self.employees = {}  # employee_id: employee_data dict
+
+    def add_employee(self, employee_id, name, base_salary, **kwargs):
+        """
+        Function to add employee data.
+        Uses **kwargs for flexible additional data like department, allowances, etc.
+        """
+        if employee_id in self.employees:
+            raise ValueError(f"Employee with ID {employee_id} already exists.")
+        self.employees[employee_id] = {
+            'name': name,
+            'base_salary': base_salary,
+            'bonus': 0,
+            'deductions': 0,
+            **kwargs  # Flexible additional fields
+        }
+
+    def calculate_salary(self, employee_id, bonus=0, deductions=0):
+        """
+        Function to calculate salary dynamically.
+        Net salary = base_salary + bonus - deductions
+        Uses default arguments for bonus and deductions.
+        """
+        if employee_id not in self.employees:
+            raise ValueError(f"Employee with ID {employee_id} not found.")
+        emp = self.employees[employee_id]
+        net_salary = emp['base_salary'] + bonus - deductions
+        return net_salary
+
+    def handle_bonus_and_deductions(self, employee_id, bonus=0, deductions=0):
+        """
+        Function to handle bonus and deductions.
+        Updates the employee's bonus and deductions in the system.
+        Uses default arguments for flexibility.
+        """
+        if employee_id not in self.employees:
+            raise ValueError(f"Employee with ID {employee_id} not found.")
+        emp = self.employees[employee_id]
+        emp['bonus'] += bonus
+        emp['deductions'] += deductions
+
+    def generate_payroll_report(self, employee_id=None):
+        """
+        Function to generate payroll report.
+        If employee_id is provided, generates report for that employee.
+        If None, generates report for all employees.
+        """
+        if employee_id is not None:
+            if employee_id not in self.employees:
+                return f"No employee found with ID {employee_id}."
+            emp = self.employees[employee_id]
+            net_salary = self.calculate_salary(employee_id, emp['bonus'], emp['deductions'])
+            report = f"Payroll Report for Employee {employee_id}:\n"
+            report += f"Name: {emp['name']}\n"
+            report += f"Base Salary: {emp['base_salary']:.2f}\n"
+            report += f"Bonus: {emp['bonus']:.2f}\n"
+            report += f"Deductions: {emp['deductions']:.2f}\n"
+            report += f"Net Salary: {net_salary:.2f}\n"
+            return report
+        else:
+            report = "Payroll Report for All Employees:\n"
+            for eid, emp in self.employees.items():
+                net_salary = self.calculate_salary(eid, emp['bonus'], emp['deductions'])
+                report += f"ID: {eid}, Name: {emp['name']}, Net Salary: {net_salary:.2f}\n"
+            return report
+
+
+# Example usage
+if __name__ == "__main__":
+    payroll = PayrollSystem()
+
+    # Add employees with flexible data
+    payroll.add_employee(1, "Alice", 50000, department="Engineering", allowances=2000)
+    payroll.add_employee(2, "Bob", 45000, department="HR")
+
+    # Handle bonus and deductions
+    payroll.handle_bonus_and_deductions(1, bonus=5000, deductions=1000)
+    payroll.handle_bonus_and_deductions(2, bonus=2000)
+
+    # Generate reports
+    print(payroll.generate_payroll_report(1))
+    print(payroll.generate_payroll_report())

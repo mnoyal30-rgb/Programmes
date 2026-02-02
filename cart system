@@ -1,0 +1,71 @@
+def add_item(cart, name, price, quantity):
+    """
+    Adds an item to the shopping cart. If the item already exists, updates the quantity.
+    """
+    for item in cart:
+        if item['name'] == name:
+            item['quantity'] += quantity
+            return
+    cart.append({'name': name, 'price': price, 'quantity': quantity})
+
+def remove_item(cart, name):
+    """
+    Removes an item from the shopping cart.
+    """
+    for item in cart:
+        if item['name'] == name:
+            cart.remove(item)
+            return
+    print(f"Item '{name}' not found in cart.")
+
+def calculate_total(cart):
+    """
+    Calculates the total bill for all items in the cart.
+    """
+    total = 0
+    for item in cart:
+        total += item['price'] * item['quantity']
+    return total
+
+def apply_discount(total, discount_percent):
+    """
+    Applies a discount to the total bill.
+    """
+    discount = total * (discount_percent / 100)
+    return total - discount
+
+def main():
+    """
+    Demonstrates the shopping cart functionality.
+    """
+    cart = []
+
+    # Add items
+    add_item(cart, 'Apple', 1.50, 3)
+    add_item(cart, 'Banana', 0.75, 2)
+    add_item(cart, 'Orange', 2.00, 1)
+
+    print("Cart after adding items:")
+    for item in cart:
+        print(f"{item['name']}: {item['quantity']} x ${item['price']}")
+
+    # Calculate total
+    total = calculate_total(cart)
+    print(f"\nTotal before discount: ${total:.2f}")
+
+    # Apply discount
+    discounted_total = apply_discount(total, 10)  # 10% discount
+    print(f"Total after 10% discount: ${discounted_total:.2f}")
+
+    # Remove an item
+    remove_item(cart, 'Banana')
+    print("\nCart after removing Banana:")
+    for item in cart:
+        print(f"{item['name']}: {item['quantity']} x ${item['price']}")
+
+    # Recalculate total
+    total = calculate_total(cart)
+    print(f"\nNew total: ${total:.2f}")
+
+if  "_main_":
+    main()
