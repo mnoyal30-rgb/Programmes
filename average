@@ -1,0 +1,64 @@
+# Global balance variable
+balance = 0.0
+
+def deposit(amount):
+    """
+    Function to deposit money into the account.
+    Adds the amount to the balance.
+    """
+    global balance
+    if amount > 0:
+        balance += amount
+        print(f"Deposited ${amount:.2f}. New balance: ${balance:.2f}")
+    else:
+        print("Deposit amount must be positive.")
+
+def withdraw(amount):
+    """
+    Function to withdraw money from the account.
+    Subtracts the amount from the balance if sufficient funds.
+    """
+    global balance
+    if amount > 0:
+        if amount <= balance:
+            balance -= amount
+            print(f"Withdrew ${amount:.2f}. New balance: ${balance:.2f}")
+        else:
+            print("Insufficient funds.")
+    else:
+        print("Withdrawal amount must be positive.")
+
+def check_balance():
+    """
+    Function to check the current balance.
+    Prints the current balance.
+    """
+    global balance
+    print(f"Current balance: ${balance:.2f}")
+
+# Main function to demonstrate the banking application
+def main():
+    print("Welcome to Simple Banking Application")
+    while True:
+        print("\nChoose an option:")
+        print("1. Deposit")
+        print("2. Withdraw")
+        print("3. Check Balance")
+        print("4. Exit")
+        choice = input("Enter your choice (1-4): ")
+        if choice == '1':
+            amount = float(input("Enter deposit amount: "))
+            deposit(amount)
+        elif choice == '2':
+            amount = float(input("Enter withdrawal amount: "))
+            withdraw(amount)
+        elif choice == '3':
+            check_balance()
+        elif choice == '4':
+            print("Thank you for using the banking application.")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+if "_main_":
+    main()

@@ -1,0 +1,15 @@
+class BillingEngine:
+    def calculate_bill(self, base_amount, tax_calculator):
+        return base_amount + tax_calculator(base_amount)
+
+# Tax calculators
+us_tax = lambda amt: amt * 0.10
+eu_tax = lambda amt: amt * 0.20
+india_tax = lambda amt: amt * 0.18
+
+if __name__ == "__main__":
+    engine = BillingEngine()
+    base = 1000
+    print(f"US: ${engine.calculate_bill(base, us_tax):.2f}")
+    print(f"EU: ${engine.calculate_bill(base, eu_tax):.2f}")
+    print(f"India: ${engine.calculate_bill(base, india_tax):.2f}")

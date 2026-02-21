@@ -1,0 +1,26 @@
+def input_units_consumed():
+    """Function to input units consumed."""
+    units = int(input("Enter units consumed: "))
+    return units
+
+def calculate_bill(units):
+    """Function to calculate bill using slab rates."""
+    bill = 0
+    if units <= 100:
+        bill = units * 5
+    else:
+        bill = (100 * 5) + ((units - 100) * 7)
+    bill += 50  # Fixed charge
+    return bill
+
+def generate_bill_summary(units, bill):
+    """Function to generate bill summary."""
+    summary = f"Units Consumed: {units}\n"
+    summary += f"Total Electricity Bill: {bill}"
+    return summary
+
+if  "_main_":
+    units = input_units_consumed()
+    bill = calculate_bill(units)
+    summary = generate_bill_summary(units, bill)
+    print(summary)
